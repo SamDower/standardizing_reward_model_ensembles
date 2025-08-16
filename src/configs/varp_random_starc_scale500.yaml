@@ -1,0 +1,53 @@
+# base_config.yaml
+
+# Simulation parameters
+simulation:
+  epochs: 50
+  evaluate_every: 3
+  batch_size: 15
+  full_retrain: True
+  kl_budget: 3.5
+
+exp_name: "varp_random_starc_scale500"
+seed: 9
+
+train_dataset:
+  class: RandomTrajectoryDataset
+
+eval_dataset:
+  class: CompleteTrajectoryDataset
+
+# Model parameters
+pref_model:
+  class: EnsemblePreferenceModel
+  model:
+    input_size: 40
+    layers: "[10, 5]"
+    init_func: "xavier_uniform"
+    activation_fn: "tanh"
+  lr: 0.01
+  train_test_split: 0.2
+  train_batch_size: 50
+  eval_batch_size: 1000
+  num_epochs: 1000
+  early_stopping_patience: 50
+  early_stopping: True
+  ensemble_size: 10
+  standardize_features: True
+
+reward_standardizer: 
+  class: StarcRewardStandardizer
+  scale_factor: 500
+
+# Data parameters
+data:
+  train_size: 15000
+  test_size: 3000
+
+# Trainer parameters
+trainer: 
+  class: BoltzmannBoNPolicyTrainer
+
+# Data Selection Parameters
+data_selection:
+  policy: BALDSelectionPolicy
